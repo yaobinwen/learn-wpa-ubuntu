@@ -734,17 +734,23 @@ static void wpa_supplicant_stop_bgscan(struct wpa_supplicant *wpa_s)
 
 static void wpa_supplicant_start_autoscan(struct wpa_supplicant *wpa_s)
 {
+	wpa_printf(MSG_DEBUG, "wpa_supplicant_start_autoscan");
+
 	if (autoscan_init(wpa_s, 0))
 		wpa_dbg(wpa_s, MSG_DEBUG, "Failed to initialize autoscan");
 }
 
 static void wpa_supplicant_stop_autoscan(struct wpa_supplicant *wpa_s)
 {
+	wpa_printf(MSG_DEBUG, "wpa_supplicant_stop_autoscan");
+
 	autoscan_deinit(wpa_s);
 }
 
 void wpa_supplicant_reinit_autoscan(struct wpa_supplicant *wpa_s)
 {
+	wpa_printf(MSG_DEBUG, "wpa_supplicant_reinit_autoscan");
+
 	if (wpa_s->wpa_state == WPA_DISCONNECTED ||
 		wpa_s->wpa_state == WPA_SCANNING)
 	{

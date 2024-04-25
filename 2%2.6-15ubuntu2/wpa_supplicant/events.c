@@ -1684,6 +1684,7 @@ static int _wpa_supplicant_event_scan_results(struct wpa_supplicant *wpa_s,
 	wpa_dbg(wpa_s, MSG_DEBUG, "New scan results available (own=%u ext=%u)",
 			wpa_s->own_scan_running,
 			data ? data->scan_info.external_scan : 0);
+	wpa_printf(MSG_DEBUG, "[events][_wpa_supplicant_event_scan_results] 111");
 	if (wpa_s->last_scan_req == MANUAL_SCAN_REQ &&
 		wpa_s->manual_scan_use_id && wpa_s->own_scan_running &&
 		own_request && !(data && data->scan_info.external_scan))
@@ -1696,9 +1697,16 @@ static int _wpa_supplicant_event_scan_results(struct wpa_supplicant *wpa_s,
 	{
 		wpa_msg_ctrl(wpa_s, MSG_INFO, WPA_EVENT_SCAN_RESULTS);
 	}
+
+	wpa_printf(MSG_DEBUG, "[events][_wpa_supplicant_event_scan_results] 222");
+
 	wpas_notify_scan_results(wpa_s);
 
+	wpa_printf(MSG_DEBUG, "[events][_wpa_supplicant_event_scan_results] 333");
+
 	wpas_notify_scan_done(wpa_s, 1);
+
+	wpa_printf(MSG_DEBUG, "[events][_wpa_supplicant_event_scan_results] 444");
 
 	if (data && data->scan_info.external_scan)
 	{
@@ -1707,17 +1715,39 @@ static int _wpa_supplicant_event_scan_results(struct wpa_supplicant *wpa_s,
 		return 0;
 	}
 
+	wpa_printf(MSG_DEBUG, "[events][_wpa_supplicant_event_scan_results] 555");
+
 	if (wnm_scan_process(wpa_s, 1) > 0)
+	{
+		wpa_dbg(
+			wpa_s, MSG_DEBUG,
+			"[events][_wpa_supplicant_event_scan_results] wnm_scan_process result > 0: goto scan_work_done");
 		goto scan_work_done;
+	}
 
 	if (sme_proc_obss_scan(wpa_s) > 0)
+	{
+		wpa_dbg(
+			wpa_s, MSG_DEBUG,
+			"[events][_wpa_supplicant_event_scan_results] sme_proc_obss_scan result > 0: goto scan_work_done");
 		goto scan_work_done;
+	}
 
 	if ((wpa_s->conf->ap_scan == 2 && !wpas_wps_searching(wpa_s)))
+	{
+		wpa_dbg(
+			wpa_s, MSG_DEBUG,
+			"[events][_wpa_supplicant_event_scan_results] (wpa_s->conf->ap_scan == 2 && !wpas_wps_searching(wpa_s)): goto scan_work_done");
 		goto scan_work_done;
+	}
 
 	if (autoscan_notify_scan(wpa_s, scan_res))
+	{
+		wpa_dbg(
+			wpa_s, MSG_DEBUG,
+			"[events][_wpa_supplicant_event_scan_results] autoscan_notify_scan: goto scan_work_done");
 		goto scan_work_done;
+	}
 
 	if (wpa_s->disconnected)
 	{

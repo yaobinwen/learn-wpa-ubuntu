@@ -40,10 +40,14 @@ static void *autoscan_periodic_init(struct wpa_supplicant *wpa_s,
 {
 	struct autoscan_periodic_data *data;
 
+	wpa_printf(MSG_DEBUG, "[ywen] autoscan_periodic_init begins");
+
 	data = os_zalloc(sizeof(struct autoscan_periodic_data));
 	if (data == NULL)
 		return NULL;
 
+	// NOTE(ywen): Well, in fact, this "get_params" works more like "set param
+	// to data".
 	if (autoscan_periodic_get_params(data, params) < 0)
 	{
 		os_free(data);

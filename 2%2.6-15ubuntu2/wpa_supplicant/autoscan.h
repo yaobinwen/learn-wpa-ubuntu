@@ -11,10 +11,11 @@
 
 struct wpa_supplicant;
 
-struct autoscan_ops {
+struct autoscan_ops
+{
 	const char *name;
 
-	void * (*init)(struct wpa_supplicant *wpa_s, const char *params);
+	void *(*init)(struct wpa_supplicant *wpa_s, const char *params);
 	void (*deinit)(void *priv);
 
 	int (*notify_scan)(void *priv, struct wpa_scan_results *scan_res);
@@ -25,7 +26,7 @@ struct autoscan_ops {
 int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan);
 void autoscan_deinit(struct wpa_supplicant *wpa_s);
 int autoscan_notify_scan(struct wpa_supplicant *wpa_s,
-			 struct wpa_scan_results *scan_res);
+						 struct wpa_scan_results *scan_res);
 
 /* Available autoscan modules */
 
@@ -49,7 +50,7 @@ static inline void autoscan_deinit(struct wpa_supplicant *wpa_s)
 }
 
 static inline int autoscan_notify_scan(struct wpa_supplicant *wpa_s,
-				       struct wpa_scan_results *scan_res)
+									   struct wpa_scan_results *scan_res)
 {
 	return 0;
 }

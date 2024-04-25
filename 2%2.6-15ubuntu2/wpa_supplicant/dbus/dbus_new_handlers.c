@@ -1530,6 +1530,7 @@ DBusMessage *wpas_dbus_handler_scan(DBusMessage *message,
 			params.num_ssids++;
 		}
 #ifdef CONFIG_AUTOSCAN
+		wpa_printf(MSG_DEBUG, "[ywen][wpas_dbus_handler_scan] type==active: autoscan_deinit");
 		autoscan_deinit(wpa_s);
 #endif /* CONFIG_AUTOSCAN */
 		if (wpa_s->sched_scanning)
@@ -2255,6 +2256,7 @@ DBusMessage *wpas_dbus_handler_autoscan(DBusMessage *message,
 	{
 		os_free(wpa_s->conf->autoscan);
 		wpa_s->conf->autoscan = NULL;
+		wpa_printf(MSG_DEBUG, "[ywen][wpas_dbus_handler_autoscan] arg != NULL && os_strlen(arg) == 0: autoscan_deinit");
 		autoscan_deinit(wpa_s);
 	}
 	else

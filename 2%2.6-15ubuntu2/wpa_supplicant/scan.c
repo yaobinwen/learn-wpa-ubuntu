@@ -1351,20 +1351,25 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 	if (!wpa_s->sched_scan_supported)
 	{
 		// NOTE(ywen): Scheduled scan is NOT supported!
-		wpa_printf(MSG_INFO, "[ywen] %s: scheduled scan is NOT supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
+		wpa_printf(MSG_DEBUG, "[ywen] %s: scheduled scan is NOT supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
 		return -1;
 	}
 	else
 	{
-		wpa_printf(MSG_INFO, "[ywen] %s: scheduled scan is supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
+		wpa_printf(MSG_DEBUG, "[ywen] %s: scheduled scan is supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
 	}
 
 	if (wpa_s->max_sched_scan_ssids > WPAS_MAX_SCAN_SSIDS)
 		max_sched_scan_ssids = WPAS_MAX_SCAN_SSIDS;
 	else
 		max_sched_scan_ssids = wpa_s->max_sched_scan_ssids;
+
 	if (max_sched_scan_ssids < 1 || wpa_s->conf->disable_scan_offload)
+	{
 		return -1;
+	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 1");
 
 	wpa_s->sched_scan_stop_req = 0;
 
@@ -1373,6 +1378,8 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 		wpa_dbg(wpa_s, MSG_DEBUG, "Already sched scanning");
 		return 0;
 	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 2");
 
 	need_ssids = 0;
 	for (ssid = wpa_s->conf->ssid; ssid; ssid = ssid->next)
@@ -1402,6 +1409,9 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 		}
 #endif /* CONFIG_WPS */
 	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 3");
+
 	if (wildcard)
 		need_ssids++;
 
@@ -1422,6 +1432,8 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 		return -1;
 	}
 
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 4");
+
 	os_memset(&params, 0, sizeof(params));
 
 	/* If we can't allocate space for the filters, we just don't filter */
@@ -1438,6 +1450,8 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 		scan_params = wpa_s->autoscan_params;
 		goto scan;
 	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 5");
 
 	/* Find the starting point from which to continue scanning */
 	ssid = wpa_s->conf->ssid;
@@ -1523,6 +1537,8 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 		wpa_s->prev_sched_ssid = ssid;
 		ssid = ssid->next;
 	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 6");
 
 	if (params.num_filter_ssids == 0)
 	{
@@ -1621,6 +1637,8 @@ scan:
 		}
 	}
 
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 7");
+
 	ret = wpa_supplicant_start_sched_scan(wpa_s, scan_params);
 	wpabuf_free(extra_ie);
 	os_free(params.filter_ssids);
@@ -1631,6 +1649,8 @@ scan:
 			wpa_supplicant_set_state(wpa_s, prev_state);
 		return ret;
 	}
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 8");
 
 	/* If we have more SSIDs to scan, add a timeout so we scan them too */
 	if (ssid || !wpa_s->first_sched_scan)
@@ -1655,6 +1675,8 @@ scan:
 	/* If there is no more ssids, start next time from the beginning */
 	if (!ssid)
 		wpa_s->prev_sched_ssid = NULL;
+
+	wpa_printf(MSG_DEBUG, "[ywen][wpa_supplicant_req_sched_scan] 9");
 
 	return 0;
 }
