@@ -16,17 +16,14 @@
 #include "scan.h"
 #include "autoscan.h"
 
-
-static const struct autoscan_ops * autoscan_modules[] = {
+static const struct autoscan_ops *autoscan_modules[] = {
 #ifdef CONFIG_AUTOSCAN_EXPONENTIAL
 	&autoscan_exponential_ops,
 #endif /* CONFIG_AUTOSCAN_EXPONENTIAL */
 #ifdef CONFIG_AUTOSCAN_PERIODIC
 	&autoscan_periodic_ops,
 #endif /* CONFIG_AUTOSCAN_PERIODIC */
-	NULL
-};
-
+	NULL};
 
 static void request_scan(struct wpa_supplicant *wpa_s)
 {
@@ -35,7 +32,6 @@ static void request_scan(struct wpa_supplicant *wpa_s)
 	if (wpa_supplicant_req_sched_scan(wpa_s))
 		wpa_supplicant_req_scan(wpa_s, wpa_s->scan_interval, 0);
 }
-
 
 int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan)
 {
@@ -57,24 +53,31 @@ int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan)
 		return 0;
 
 	params = os_strchr(name, ':');
-	if (params == NULL) {
+	if (params == NULL)
+	{
 		params = "";
 		nlen = os_strlen(name);
-	} else {
+	}
+	else
+	{
 		nlen = params - name;
 		params++;
 	}
 
-	for (i = 0; autoscan_modules[i]; i++) {
-		if (os_strncmp(name, autoscan_modules[i]->name, nlen) == 0) {
+	for (i = 0; autoscan_modules[i]; i++)
+	{
+		if (os_strncmp(name, autoscan_modules[i]->name, nlen) == 0)
+		{
 			ops = autoscan_modules[i];
 			break;
 		}
 	}
 
-	if (ops == NULL) {
+	if (ops == NULL)
+	{
 		wpa_printf(MSG_ERROR, "autoscan: Could not find module "
-			   "matching the parameter '%s'", name);
+							  "matching the parameter '%s'",
+				   name);
 		return -1;
 	}
 
@@ -85,7 +88,8 @@ int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan)
 	wpa_s->autoscan_params = NULL;
 
 	wpa_s->autoscan_priv = ops->init(wpa_s, params);
-	if (!wpa_s->autoscan_priv) {
+	if (!wpa_s->autoscan_priv)
+	{
 		os_free(scan_plans);
 		return -1;
 	}
@@ -98,7 +102,8 @@ int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan)
 	wpa_s->autoscan = ops;
 
 	wpa_printf(MSG_DEBUG, "autoscan: Initialized module '%s' with "
-		   "parameters '%s'", ops->name, params);
+						  "parameters '%s'",
+			   ops->name, params);
 	if (!req_scan)
 		return 0;
 
@@ -116,12 +121,12 @@ int autoscan_init(struct wpa_supplicant *wpa_s, int req_scan)
 	return 0;
 }
 
-
 void autoscan_deinit(struct wpa_supplicant *wpa_s)
 {
-	if (wpa_s->autoscan && wpa_s->autoscan_priv) {
+	if (wpa_s->autoscan && wpa_s->autoscan_priv)
+	{
 		wpa_printf(MSG_DEBUG, "autoscan: Deinitializing module '%s'",
-			   wpa_s->autoscan->name);
+				   wpa_s->autoscan->name);
 		wpa_s->autoscan->deinit(wpa_s->autoscan_priv);
 		wpa_s->autoscan = NULL;
 		wpa_s->autoscan_priv = NULL;
@@ -134,15 +139,15 @@ void autoscan_deinit(struct wpa_supplicant *wpa_s)
 	}
 }
 
-
 int autoscan_notify_scan(struct wpa_supplicant *wpa_s,
-			 struct wpa_scan_results *scan_res)
+						 struct wpa_scan_results *scan_res)
 {
 	int interval;
 
-	if (wpa_s->autoscan && wpa_s->autoscan_priv) {
+	if (wpa_s->autoscan && wpa_s->autoscan_priv)
+	{
 		interval = wpa_s->autoscan->notify_scan(wpa_s->autoscan_priv,
-							scan_res);
+												scan_res);
 
 		if (interval <= 0)
 			return -1;
