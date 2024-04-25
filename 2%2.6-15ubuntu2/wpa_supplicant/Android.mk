@@ -1549,6 +1549,10 @@ ifndef LDO
 LDO=$(CC)
 endif
 
+# NOTE(ywen): Last but not the least, add `wpa_supplicant_print.c` so I can
+# print supplicant's state for debugging purpose.
+OBJS += wpa_supplicant_print.c
+
 ########################
 
 include $(CLEAR_VARS)

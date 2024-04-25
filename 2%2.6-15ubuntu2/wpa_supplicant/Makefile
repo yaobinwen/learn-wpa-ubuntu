@@ -1663,6 +1663,9 @@ ifndef LDO
 LDO=$(CC)
 endif
 
+# NOTE(ywen): Add wpa_supplicant_print.
+OBJS += wpa_supplicant_print.o
+
 Q=@
 E=echo
 ifeq ($(V), 1)
