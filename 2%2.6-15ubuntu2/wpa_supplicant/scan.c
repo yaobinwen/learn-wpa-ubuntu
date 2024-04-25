@@ -1349,7 +1349,15 @@ int wpa_supplicant_req_sched_scan(struct wpa_supplicant *wpa_s)
 	struct sched_scan_plan scan_plan;
 
 	if (!wpa_s->sched_scan_supported)
+	{
+		// NOTE(ywen): Scheduled scan is NOT supported!
+		wpa_printf(MSG_INFO, "[ywen] %s: scheduled scan is NOT supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
 		return -1;
+	}
+	else
+	{
+		wpa_printf(MSG_INFO, "[ywen] %s: scheduled scan is supported: %d", wpa_s->ifname, wpa_s->sched_scan_supported);
+	}
 
 	if (wpa_s->max_sched_scan_ssids > WPAS_MAX_SCAN_SSIDS)
 		max_sched_scan_ssids = WPAS_MAX_SCAN_SSIDS;
