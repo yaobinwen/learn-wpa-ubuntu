@@ -1,0 +1,8 @@
+# Ignore general build output files.
+*.d
+*.o
+
+# Ignore wpa_supplicant build output files.
+wpa_supplicant/wpa_cli
+wpa_supplicant/wpa_passphrase
+wpa_supplicant/wpa_supplicant
