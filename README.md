@@ -11,11 +11,23 @@ Each version is in its own sub-folder. My notes are all marked with `NOTE(ywen)`
 - `2%2.6-15ubuntu2`: The version used on Ubuntu 18.04 (with patches applied). Corresponding tag: [`applied/2%2.6-15ubuntu2`](https://git.launchpad.net/ubuntu/+source/wpa/tag/?h=applied/2%252.6-15ubuntu2).
   - I have to replace `:` right after the epoch version with `%` (as the git tag did) because `make` doesn't seem to like `:` in the file paths. It would report "multiple target patterns" errors.
 
-## How to build
+## How to build `hostapd`
+
+See the section "Build configuration" in `hostapd/README`. It's not very detailed, so you can also refer to the build instructions for `wpa_supplicant`. In general:
+- Install the build dependencies.
+- Create `hostapd/.config` to select the features to be built.
+  - The current `hostapd/.config` was a modified copy of `debian/config/hostapd/linux`.
+  - But `hostapd/defconfig` is another example of configuration.
+- Inside `hostapd`, just run `make`.
+- The results are two executables in the same folder: `hostapd` and `hostapd_cli`.
+
+## How to build `wpa_supplicant`
 
 See the section "Building and installing" in `wpa_supplicant/README` for detailed instructions. In general:
 - Install the build dependencies. See [`install-deps.sh`](./install-deps.sh).
 - Create `wpa_supplicant/.config` to select the features to be built.
+  - The current `wpa_supplicant/.config` was a modified copy of `debian/config/wpasupplicant/linux`. See the first line of comment in `wpa_supplicant/.config`.
+  - But `wpa_supplicant/defconfig` is another example of configuration.
 - Inside `wpa_supplicant`, just run `make`.
 
 ## `wpa_supplicant`
