@@ -17,3 +17,7 @@ See the section "Building and installing" in `wpa_supplicant/README` for detaile
 - Install the build dependencies. See [`install-deps.sh`](./install-deps.sh).
 - Create `wpa_supplicant/.config` to select the features to be built.
 - Inside `wpa_supplicant`, just run `make`.
+
+## `wpa_supplicant`
+
+The functions that implement the [control interface commands](https://w1.fi/wpa_supplicant/devel/ctrl_iface_page.html) can be found in `wpa_supplicant/ctrl_iface.c`. For example, the command `SELECT_NETWORK` is implemented by the function `wpa_supplicant_ctrl_iface_select_network` which then calls the function `wpa_supplicant_select_network` in `wpa_supplicant/wpa_supplicant.c`.
