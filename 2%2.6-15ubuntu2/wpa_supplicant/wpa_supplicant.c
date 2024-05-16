@@ -3197,6 +3197,10 @@ void wpa_supplicant_select_network(struct wpa_supplicant *wpa_s,
 
 	if (ssid && ssid != wpa_s->current_ssid && wpa_s->current_ssid)
 	{
+		// NOTE(ywen): If the WPA is already associated with a network and the
+		// SSID of the network to be associated is different from the currently
+		// associated network, then leave the current network (with the reason
+		// `DEAUTH_LEAVING`) before joining the new network.
 		if (wpa_s->wpa_state >= WPA_AUTHENTICATING)
 			wpa_s->own_disconnect_req = 1;
 		wpa_supplicant_deauthenticate(
