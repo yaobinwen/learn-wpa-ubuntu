@@ -846,6 +846,8 @@ static int hostapd_config_read_wep(struct hostapd_wep_keys *wep, int keyidx,
 
     if (val[0] == '"')
     {
+        // NOTE(ywen): This branch is the case of a double-quoted string of
+        // characters.
         if (len < 2 || val[len - 1] != '"')
             return -1;
         len -= 2;
@@ -857,6 +859,7 @@ static int hostapd_config_read_wep(struct hostapd_wep_keys *wep, int keyidx,
     }
     else
     {
+        // NOTE(ywen): This branch is the case of a string of hexadecimals.
         if (len & 1)
             return -1;
         len /= 2;
@@ -3252,6 +3255,14 @@ static int hostapd_config_fill(struct hostapd_config *conf,
              os_strcmp(buf, "wep_key2") == 0 ||
              os_strcmp(buf, "wep_key3") == 0)
     {
+        // NOTE(ywen): If the current configuration item is `wep_key[0-3]`, then
+        // call `hostapd_config_read_wep` to process the current line. Note that
+        // hostapd doesn't require all the keys be configured, so after the
+        // entire configuration file is parsed, it's possible to end up with
+        // the following WEP key configuration:
+        // wep_default_key = 0
+        // wep_key0: "something"
+        // wep_key2: "something else"
         if (hostapd_config_read_wep(&bss->ssid.wep,
                                     buf[7] - '0', pos))
         {
@@ -4407,6 +4418,9 @@ struct hostapd_config *hostapd_config_read(const char *fname)
         }
         *pos = '\0';
         pos++;
+
+        // NOTE(ywen): `hostapd_config_fill` is called in the `while` loop, so
+        // every call to `hostapd_config_fill` processes one line of configuration.
         errors += hostapd_config_fill(conf, bss, buf, pos, line);
     }
 

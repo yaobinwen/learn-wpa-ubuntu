@@ -68,11 +68,17 @@ struct ft_remote_r0kh;
 struct ft_remote_r1kh;
 
 #define NUM_WEP_KEYS 4
+// NOTE(ywen): This struct contains the WEP configuration.
 struct hostapd_wep_keys
 {
+    // NOTE(ywen): The `wep_default_key`, i.e., which key will be used to
+    // encrypt/decrypt the network traffic.
     u8 idx;
+    // NOTE(ywen): All the (four) keys.
     u8 *key[NUM_WEP_KEYS];
+    // NOTE(ywen): The lengths of the keys.
     size_t len[NUM_WEP_KEYS];
+    // TODO(ywen): Not sure how `keys_set` is used. Need to figure it out.
     int keys_set;
     size_t default_len; /* key length used for dynamic key generation */
 };
