@@ -38,7 +38,7 @@ when WPS is used to configure the access point.
 
 
 More information about WPS is available from Wi-Fi Alliance:
-http://www.wi-fi.org/wifi-protected-setup
+https://www.wi-fi.org/discover-wi-fi/wi-fi-protected-setup
 
 
 hostapd implementation
