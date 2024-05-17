@@ -1,0 +1,8 @@
+- name: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
+
+- name: restart wpa_supplicant.service
+  systemd:
+    unit: wpa_supplicant.service
+    state: restarted

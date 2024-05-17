@@ -1,0 +1,29 @@
+- debug:
+    var: wpa_supplicant_debug_exec
+
+- name: Create the symlink /usr/local/bin/wpa_supplicant.debug
+  file:
+    path: /usr/local/bin/wpa_supplicant.debug
+    state: link
+    src: "{{wpa_supplicant_debug_exec}}"
+
+- name: Create /etc/systemd/system/wpa_supplicant.service.d
+  file:
+    path: /etc/systemd/system/wpa_supplicant.service.d
+    state: directory
+    owner: "0"
+    group: "0"
+    mode: "0o755"
+
+- name: Add the additional config for wpa_supplicant.service.
+  template:
+    src: wpa_supplicant.service.d/10-exec-start.conf.j2
+    dest: /etc/systemd/system/wpa_supplicant.service.d/10-exec-start.conf
+    owner: "0"
+    group: "0"
+    mode: "0o644"
+  notify:
+    - systemctl daemon-reload
+    - restart wpa_supplicant.service
+
+- meta: flush_handlers

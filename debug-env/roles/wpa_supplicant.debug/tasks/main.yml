@@ -1,0 +1,4 @@
+- block:
+    - include_tasks: wpa_supplicant.debug.yml
+  always:
+    - meta: flush_handlers
